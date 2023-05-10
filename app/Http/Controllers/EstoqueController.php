@@ -17,6 +17,13 @@ class EstoqueController extends Controller
         ]);
     }
 
+public function busca(Request $form) {
+    $busca = $form->busca;
+    $lista = Estoque::where('nome', 'LIKE', "%{$busca}%")->get();
+
+    return view('estoque.index', ['lista' => $lista, ]);
+}
+
     public function adicionar()
     {
         return view('estoque.adicionar');
@@ -26,7 +33,7 @@ class EstoqueController extends Controller
     {
         $dados = $form->validated();
         Estoque::create($dados);
-        return redirect('estoque');
+        return redirect('estoque')->with('sucesso', 'Item adicionado com sucesso');;;
     }
 
     public function editarGravar(EstoqueRequest $form)
@@ -35,12 +42,25 @@ class EstoqueController extends Controller
         $estoque = Estoque::find($dados['id']);
         $estoque->fill($dados);
         $estoque->save();
-        return redirect('estoque');
+        return redirect('estoque')->with('sucesso', 'Item alterado com sucesso');;
     }
 
-    public function editar(Estoque $estoque) {
+    public function editar(Estoque $estoque)
+    {
         return view('estoque.adicionar', [
             'editar' => $estoque,
+        ]);
+    }
+
+    public function apagar(Estoque $estoque)
+    {
+        /*Se o método de acesso for DELETE, apaga no banco, se não motra a tela de confirmação.*/
+        if (request()->isMethod('DELETE')) {
+            $estoque->delete();
+            return redirect('estoque')->with('sucesso', 'Item apagado com sucesso');
+        }
+        return view('estoque.apagar',[
+            'estoque' => $estoque,
         ]);
     }
 }
