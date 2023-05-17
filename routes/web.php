@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque');
+Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque')->middleware('auth');
 
 Route::post('/estoque/busca', [EstoqueController::class, 'busca'])->name('estoque.busca');
 

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -20,7 +21,11 @@ class UserController extends Controller
         //Criptografa a senha
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
+
+        Mail::raw('Este é um e-mail de teste', function($msg) {
+            $msg->to('destinatario@hotmail.com')->subject('Usuário criado com sucesso');
+        });
 
         return redirect()->route('user.index');
     }
