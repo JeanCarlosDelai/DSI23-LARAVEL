@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,24 @@ Route::put('/estoque/adicionar', [EstoqueController::class, 'editarGravar']);
 Route::get('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar'])->name('estoque.apagar');
 
 Route::delete('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar']);
+
+// Grupo para rotas que comecem com a rota user
+
+Route::group(['prefix' => '/user'], function () {
+
+    Route::get('', [UserController::class, 'index'])->name('user.index');
+
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+
+    Route::post('/create', [UserController::class, 'createSave']);
+
+    Route::get('/login', [UserController::class, 'login'])->name('user.login');
+
+    Route::post('/login', [UserController::class, 'login']);
+
+    Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
+});
+
 
 // Route::get('/teste', function() {
 //     return 'O teste funcionou';
